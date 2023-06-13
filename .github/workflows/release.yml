@@ -1,0 +1,127 @@
+name: "Release"
+
+permissions:
+  contents: "write"
+
+on:
+  workflow_run:
+    workflows: ["Tag"]
+    types:
+      - "completed"
+
+jobs:
+  get-tag:
+    name: "Get Tag From Package Version"
+    runs-on: "ubuntu-latest"
+    outputs:
+      pkg-version: ${{ steps.pkg-version.outputs.PKG_VERSION }} 
+    steps:
+      - name: "Check out the repo"
+        uses: actions/checkout@v3
+        with:
+          token: ${{ github.token }}
+
+      - name: "Get tag"
+        id: "pkg-version"
+        shell: "bash"
+        run: |
+          echo PKG_VERSION=$(awk -F ' = ' '$1 ~ /version/ { gsub(/["]/, "", $2); printf("%s",$2) }' offchain-resolver-gateway/Cargo.toml) >> $GITHUB_OUTPUT
+
+  create-release:
+    name: "Create release"
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    needs: "get-tag"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Check out the repo"
+        uses: actions/checkout@v3
+      
+      - name: "Create release"
+        uses: "taiki-e/create-gh-release-action@v1"
+        with:
+          # (optional) Path to changelog.
+          # changelog: CHANGELOG.md
+          branch: "main"
+          ref: refs/tags/v${{ needs.get-tag.outputs.pkg-version }}
+          token: ${{ github.token }}
+
+  upload-assets:
+    name: "Upload assets to Github releases"
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    needs: 
+     - "get-tag"
+     - "create-release"
+    strategy:
+      matrix:
+        include:
+          - target: "x86_64-unknown-linux-gnu"
+            os: "ubuntu-latest"
+          - target: "x86_64-unknown-linux-musl"
+            os: "ubuntu-latest"
+          - target: x86_64-apple-darwin
+            os: macOS-11
+            macosx_deployment_target: 10.13
+            developer_dir: /Applications/Xcode_11.7.app
+            sdkroot: /Applications/Xcode_11.7.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk
+          - target: aarch64-apple-darwin
+            os: macOS-11
+            macosx_deployment_target: 11.0
+            developer_dir: /Applications/Xcode_13.2.1.app
+            sdkroot: /Applications/Xcode_13.2.1.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk
+          # Windows build not working due to OpenSSL :(
+          # error: failed to run custom build command for `openssl-sys v0.9.88`
+          #- target: x86_64-pc-windows-msvc
+          #  os: windows-2019
+          #  rustflags: -Ctarget-feature=+crt-static
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: "Check out the repo"
+        uses: actions/checkout@v3
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: "Upload Binaries"
+        uses: "taiki-e/upload-rust-binary-action@v1"
+        with:
+          bin: "offchain-resolver-gateway"
+          target: ${{ matrix.target }}
+          archive: $bin-${{ matrix.target }}
+          ref: refs/tags/v${{ needs.get-tag.outputs.pkg-version }}
+          token: ${{ github.token }}
+
+  push-to-registry:
+    name: "Push Docker image to Docker Hub"
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    needs:
+      - "get-tag"
+      - "upload-assets"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Check out the repo"
+        uses: actions/checkout@v3
+
+      - name: "Log in to Docker Hub"
+        uses: "docker/login-action@v2"
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      
+      - name: "Extract metadata (tags, labels) for Docker"
+        id: "meta"
+        uses: "docker/metadata-action@v4"
+        with:
+          images: "jeje/ens-offchain-resolver-gateway-rs"
+      
+      - name: "Build and push Docker image"
+        uses: "docker/build-push-action@v3"
+        with:
+          context: offchain-resolver-gateway
+          push: true
+          tags: jeje/ens-offchain-resolver-gateway-rs:latest,jeje/ens-offchain-resolver-gateway-rs:v${{ needs.get-tag.outputs.pkg-version }}
+          labels: ${{ steps.meta.outputs.labels }}

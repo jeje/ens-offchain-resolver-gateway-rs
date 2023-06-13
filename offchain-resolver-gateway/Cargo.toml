@@ -1,0 +1,29 @@
+[package]
+name = "offchain-resolver-gateway"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+ccip_read_server = { path = "../ccip-read-server" }
+
+ethers = "2.0.7"
+
+tokio = { version = "1.28.2", features = ["full", "tracing"] }
+
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+tracing = "0.1.37"
+tracing-subscriber = { version = "0.3.16", features = ["env-filter"] }
+color-eyre = "0.6.2"
+eyre = "0.6.8"
+
+chrono = "0.4.26"
+thiserror = "1.0.40"
+async-trait = "0.1.68"
+clap = { version = "4.3.3", features = ["color", "error-context", "help", "std", "suggestions", "usage", "cargo", "env"] }
+
+openssl = { version = "0.10", features = ["vendored"] }
+
+[dev-dependencies]
+ethers-ccip-read = "0.1.1"

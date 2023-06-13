@@ -1,0 +1,6 @@
+[workspace]
+
+members = [
+    "ccip-read-server",
+    "offchain-resolver-gateway",
+]
