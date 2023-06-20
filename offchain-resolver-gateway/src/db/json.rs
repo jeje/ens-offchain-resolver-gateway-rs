@@ -1,35 +1,10 @@
 use async_trait::async_trait;
-use ethers::types::{Address, Bytes, U256};
+use ethers::types::{Address, U256};
 use serde_json::Value;
 use std::{fs::File, io::BufReader, path::PathBuf};
 use tracing::info;
 
-#[derive(Debug)]
-pub struct AddressRecord {
-    pub addr: Address,
-}
-
-pub struct AddressBytesRecord {
-    pub addr: Bytes,
-}
-
-#[derive(Debug)]
-pub struct TextRecord {
-    pub value: String,
-}
-
-#[derive(Debug)]
-pub struct ContentHashRecord {
-    pub content_hash: String,
-}
-
-#[async_trait]
-pub trait Database {
-    async fn addr(&self, name: &str) -> Option<AddressRecord>;
-    async fn addr_coin_type(&self, name: &str, coin_type: U256) -> Option<AddressBytesRecord>;
-    async fn text(&self, name: &str, key: &str) -> Option<TextRecord>;
-    async fn contenthash(&self, name: &str) -> Option<ContentHashRecord>;
-}
+use super::{AddressBytesRecord, AddressRecord, ContentHashRecord, Database, TextRecord};
 
 pub struct JsonDatabase {
     json: Value,
