@@ -1,0 +1,2 @@
+DROP TABLE ens_records;
+DROP TYPE RECORD_TYPE;

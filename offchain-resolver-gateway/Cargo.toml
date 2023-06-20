@@ -1,10 +1,10 @@
 [package]
 name = "offchain-resolver-gateway"
-version = "0.2.0"
+version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-ccip-read-server = "0.1.0"
+ccip_read_server = { path = "../ccip-read-server" }
 
 ethers = "2.0.7"
 
@@ -30,13 +30,14 @@ diesel = { version = "2.1.0", features = ["postgres", "r2d2"], optional = true }
 diesel-derive-enum = { version = "2.1.0", features = ["postgres"], optional = true }
 diesel_migrations = { version = "2.1.0", features = ["postgres"], optional = true }
 
+
 cfg-if = "1.0.0"
 
 [features]
 default = ["all"]
-all = ["json", "sql"]
+all = ["json", "diesel"]
 json = []
-sql = ["diesel", "diesel-derive-enum", "diesel_migrations"]
+diesel = ["dep:diesel", "diesel-derive-enum", "diesel_migrations"]
 
 [dev-dependencies]
 ethers-ccip-read = "0.1.1"
