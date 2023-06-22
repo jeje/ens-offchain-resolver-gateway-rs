@@ -1,0 +1,39 @@
+FROM ghcr.io/cross-rs/x86_64-unknown-linux-musl:latest
+
+RUN apt-get update
+RUN apt-get -y install libpq-dev libssl-dev
+#RUN apt-get -y install clang llvm
+#RUN apt-get -y install musl-tools --no-install-recommends
+#RUN apt-get -y install musl-dev --no-install-recommends
+#RUN rm -rf /var/lib/apt/lists/*
+
+#ENV CC_x86_64_unknown_linux_musl="x86_64-linux-musl-gcc"
+#ENV AR_x86_64-unknown-linux-musl="x86_64-linux-musl-gcc-ar"
+#ENV CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_RUSTFLAGS="-Clink-self-contained=yes -Clinker=rust-lld"
+#ENV CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_RUNNER="qemu-aarch64 -L /usr/aarch64-linux-gnu"
+
+ENV CC="x86_64-linux-musl-gcc"
+ENV AR="x86_64-linux-musl-gcc-ar"
+ENV CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_RUSTFLAGS="-Clink-self-contained=yes -Clinker=rust-lld"
+#ENV CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_RUNNER="qemu-aarch64 -L /usr/aarch64-linux-gnu"
+ENV PKG_CONFIG_ALLOW_CROSS=1 \
+    PKG_CONFIG_ALL_STATIC=true \
+    OPENSSL_STATIC=true \
+    OPENSSL_DIR=$MUSL_PREFIX \
+    SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt \
+    SSL_CERT_DIR=/etc/ssl/certs \
+    PQ_LIB_STATIC=true
+
+#ENV TARGET=x86_64_unknown_linux_musl \
+#    HOST=x86_64_unknown_linux_gnu \
+#    PKG_CONFIG_ALLOW_CROSS=1 \
+#    PKG_CONFIG_ALL_STATIC=true \
+#    PKG_CONFIG_PATH_x86_64_unknown_linux_musl=$MUSL_PREFIX/lib/pkgconfig \
+#    PKG_CONFIG_PATH_x86_64_unknown_linux_gnu=/usr/lib/x86_64-linux-gnu/pkgconfig \
+#    PQ_LIB_STATIC_X86_64_UNKNOWN_LINUX_MUSL=true \
+#    PG_CONFIG_X86_64_UNKNOWN_LINUX_MUSL=/musl/bin/pg_config \ 
+#    OPENSSL_STATIC=true \
+#    OPENSSL_DIR=$MUSL_PREFIX \
+#    SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt \
+#    SSL_CERT_DIR=/etc/ssl/certs \
+#    LIBZ_SYS_STATIC=1

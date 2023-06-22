@@ -1,9 +1,9 @@
 use async_trait::async_trait;
 use ethers::types::{Address, Bytes, U256};
 
-#[cfg(feature = "diesel")]
+#[cfg(feature = "sql")]
 pub mod diesel;
-#[cfg(feature = "diesel")]
+#[cfg(feature = "sql")]
 pub mod diesel_schema;
 #[cfg(feature = "json")]
 pub mod json;

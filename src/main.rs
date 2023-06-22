@@ -1,4 +1,4 @@
-#[cfg(feature = "diesel")]
+#[cfg(feature = "sql")]
 use crate::db::diesel::DieselDatabase;
 #[cfg(feature = "json")]
 use crate::db::json::JsonDatabase;
