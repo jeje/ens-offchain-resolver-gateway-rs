@@ -25,7 +25,7 @@ jobs:
         id: "pkg-version"
         shell: "bash"
         run: |
-          echo PKG_VERSION=$(awk -F ' = ' '$1 ~ /version/ { gsub(/["]/, "", $2); printf("%s",$2) }' offchain-resolver-gateway/Cargo.toml) >> $GITHUB_OUTPUT
+          echo PKG_VERSION=$(awk -F ' = ' '$1 ~ /version/ { gsub(/["]/, "", $2); printf("%s",$2) }' Cargo.toml) >> $GITHUB_OUTPUT
 
   create-release:
     name: "Create release"
@@ -121,7 +121,7 @@ jobs:
       - name: "Build and push Docker image"
         uses: "docker/build-push-action@v3"
         with:
-          context: offchain-resolver-gateway
+          #context: offchain-resolver-gateway
           push: true
           tags: jeje/ens-offchain-resolver-gateway-rs:latest,jeje/ens-offchain-resolver-gateway-rs:v${{ needs.get-tag.outputs.pkg-version }}
           labels: ${{ steps.meta.outputs.labels }}
