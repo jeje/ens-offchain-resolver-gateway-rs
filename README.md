@@ -17,12 +17,8 @@
 
 ## ENS Offchain Resolver Gateway
 
-This repository contains multiple things:
-* ENS gateway implementation working in a similar way to the
-  [TypeScript gateway implementation](https://github.com/ensdomains/offchain-resolver/tree/main/packages/gateway)
-* [ERC-3668: CCIP Read](https://eips.ethereum.org/EIPS/eip-3668#gateway-interface)
-  server **library** in order to develop some servers, like the provided ENS gateway \
-  **Note:** deliver this library as a crate on `crates.io`
+ENS gateway implementation working in a similar way to the
+[TypeScript gateway implementation](https://github.com/ensdomains/offchain-resolver/tree/main/packages/gateway).
 
 Precompiled ENS gateways are available in [releases page](https://github.com/jeje/ens-offchain-resolver-gateway-rs/releases).
 
