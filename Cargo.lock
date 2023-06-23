@@ -112,12 +112,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "anyhow"
-version = "1.0.71"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9c7d0618f0e0b7e8ff11427422b64564d5fb0be1940354bfe2e0529b18a9d9b8"
-
-[[package]]
 name = "arrayvec"
 version = "0.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -397,13 +391,13 @@ dependencies = [
 ]
 
 [[package]]
-name = "ccip_read_server"
+name = "ccip-read-server"
 version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "dd6c46f602115709bf6e08c23b5019353fbe8383d90abf598a3876ec7db225cf"
 dependencies = [
- "anyhow",
  "async-recursion",
  "async-trait",
- "ethers",
  "ethers-contract",
  "ethers-core",
  "ethers-providers",
@@ -2102,10 +2096,10 @@ dependencies = [
 
 [[package]]
 name = "offchain-resolver-gateway"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "async-trait",
- "ccip_read_server",
+ "ccip-read-server",
  "chrono",
  "clap",
  "color-eyre",
