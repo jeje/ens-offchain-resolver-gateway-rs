@@ -21,7 +21,7 @@ eyre = "0.6.8"
 chrono = "0.4.26"
 thiserror = "1.0.40"
 async-trait = "0.1.68"
-clap = { version = "4.3.3", features = ["color", "error-context", "help", "std", "suggestions", "usage", "cargo", "env"] }
+clap = { version = "4.3.6", features = ["color", "error-context", "help", "std", "suggestions", "usage", "cargo", "env"] }
 
 openssl = { version = "0.10", features = ["vendored"] }
 
