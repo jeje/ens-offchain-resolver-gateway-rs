@@ -1,6 +1,6 @@
 [package]
 name = "offchain-resolver-gateway"
-version = "0.1.1"
+version = "0.2.0"
 edition = "2021"
 
 [dependencies]
@@ -17,13 +17,41 @@ tracing = "0.1.37"
 tracing-subscriber = { version = "0.3.16", features = ["env-filter"] }
 color-eyre = "0.6.2"
 eyre = "0.6.8"
-
+cfg-if = "1.0.0"
 chrono = "0.4.26"
 thiserror = "1.0.40"
 async-trait = "0.1.68"
 clap = { version = "4.3.3", features = ["color", "error-context", "help", "std", "suggestions", "usage", "cargo", "env"] }
 
-openssl = { version = "0.10", features = ["vendored"] }
+openssl = "*"
+#reqwest = { version = "0.11.18", features = ["native-tls-vendored"], default-features = false }
+
+# Diesel dependencies
+diesel = { version = "2.1.0", features = ["postgres", "r2d2"], optional = true }
+diesel-derive-enum = { version = "2.1.0", features = ["postgres"], optional = true }
+diesel_migrations = { version = "2.1.0", features = ["postgres"], optional = true }
+
+[features]
+default = ["all"]
+all = ["json", "sql"]
+json = []
+sql = ["diesel", "diesel-derive-enum", "diesel_migrations"]
 
 [dev-dependencies]
 ethers-ccip-read = "0.1.1"
+
+#[target.x86_64-unknown-linux-musl]
+#linker = "x86_64-linux-musl-gcc"
+
+#[target.x86_64-unknown-linux-musl.dependencies]
+#openssl = { version = "*", features = ["vendored"] }
+
+#[package.metadata.cross.target.x86_64-unknown-linux-musl]
+#dockerfile = "./Dockerfile.musl"
+#pre-build = [
+#    "dpkg --add-architecture $CROSS_DEB_ARCH",
+#    "apt-get update",
+#    #"apt-get install --assume-yes libclang-10-dev clang-10 pkg-config",
+#    #"apt-get install --assume-yes sqlite3 libsqlite3-dev:$CROSS_DEB_ARCH",
+#    "apt-get install --assume-yes libpq-dev:$CROSS_DEB_ARCH libssl-dev:$CROSS_DEB_ARCH"
+#]

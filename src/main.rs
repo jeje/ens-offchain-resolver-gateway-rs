@@ -1,4 +1,8 @@
-use crate::db::{Database, JsonDatabase};
+#[cfg(feature = "sql")]
+use crate::db::diesel::DieselDatabase;
+#[cfg(feature = "json")]
+use crate::db::json::JsonDatabase;
+use crate::db::Database;
 use crate::gateway::Gateway;
 use clap::{arg, command, value_parser, ArgGroup};
 use color_eyre::Report;
@@ -50,11 +54,11 @@ async fn main() -> Result<(), Report> {
             .env("LISTEN_PORT")
         )
         .arg(arg!(--json <FILE> "Json file to use as a database").value_parser(value_parser!(PathBuf)))
-        //.arg(arg!(--postgres <CONNECTION_STRING> "PostgreSQL connection string"))
+        .arg(arg!(--postgres <CONNECTION_STRING> "PostgreSQL connection string").env("DATABASE_URL"))
         .group(
             ArgGroup::new("database")
                 .required(true)
-                .args(["json"/*, "postgres"*/]),
+                .args(["json", "postgres"]),
         )
         .get_matches();
 
@@ -76,7 +80,12 @@ async fn main() -> Result<(), Report> {
         let db = JsonDatabase::new(file);
         Arc::new(db) as Arc<dyn Database + Sync + Send>
     } else if matches.contains_id("postgres") {
-        todo!();
+        let database_url = matches
+            .get_one::<String>("postgres")
+            .expect("Database connection string missing");
+        info!("Using Postgres database from {:?}", database_url);
+        let db = DieselDatabase::new(database_url);
+        Arc::new(db) as Arc<dyn Database + Sync + Send>
     } else {
         unreachable!();
     };

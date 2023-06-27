@@ -29,16 +29,17 @@ A Docker image is also available: https://hub.docker.com/r/jeje/ens-offchain-res
 ```
 ENS Offchain Gateway server answering requests from CCIP-READ protocol (aka ERC-3668)
 
-Usage: offchain-resolver-gateway [OPTIONS] --privatekey <VALUE> <--json <FILE>>
+Usage: offchain-resolver-gateway [OPTIONS] --privatekey <VALUE> <--json <FILE>|--postgres <CONNECTION_STRING>>
 
 Options:
-  -k, --privatekey <VALUE>  private key of the wallet allowed to sign offchain ENS record results [env: PRIVATE_KEY]
-  -t, --ttl <VALUE>         TTL for signatures [env: TTL=] [default: 300]
-  -i, --ip <VALUE>          server IP to bind to -- change it to 0.0.0.0 for all interfaces [env: LISTEN_IP=] [default: 127.0.0.1]
-  -p, --port <VALUE>        server port to bind to [env: LISTEN_PORT=] [default: 8080]
-      --json <FILE>         Json file to use as a database
-  -h, --help                Print help
-  -V, --version             Print version
+  -k, --privatekey <VALUE>            private key of the wallet allowed to sign offchain ENS record results [env: PRIVATE_KEY]
+  -t, --ttl <VALUE>                   TTL for signatures [env: TTL=] [default: 300]
+  -i, --ip <VALUE>                    server IP to bind to -- change it to 0.0.0.0 for all interfaces [env: LISTEN_IP=] [default: 127.0.0.1]
+  -p, --port <VALUE>                  server port to bind to [env: LISTEN_PORT=] [default: 8080]
+      --json <FILE>                   Json file to use as a database
+      --postgres <CONNECTION_STRING>  PostgreSQL connection string [env: DATABASE_URL=postgresql://postgres:mysecretpassword@localhost:5432/ens_domains]
+  -h, --help                          Print help
+  -V, --version                       Print version
 ```
 
 ### Docker Usage
@@ -50,6 +51,11 @@ PRIVATE_KEY="<your private key>" docker run --rm \
   jeje/ens-offchain-resolver-gateway-rs \
   --json /tmp/test.eth.json
 ```
+
+### Storage Engines
+Two storage engines are supported:
+* static Json file (`JsonDatabase`)
+* Postgresql, Mysql, Sqlite3 databases (`DieselDatabase`)
 
 ### Helpful Resources
 
