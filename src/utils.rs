@@ -2,6 +2,7 @@ use crate::errors::GatewayErrors;
 use ethers::abi::{AbiEncode, Token};
 use ethers::types::Signature;
 
+/// Decode DNS name from call data, parsing ENS labels
 pub fn decode_dns_name(dns_name: &Token) -> Result<String, GatewayErrors> {
     if let Some(dns_name) = dns_name.clone().into_bytes() {
         let mut labels = vec![];
@@ -20,6 +21,9 @@ pub fn decode_dns_name(dns_name: &Token) -> Result<String, GatewayErrors> {
     }
 }
 
+/// Compute `yParityAndS` from a signature
+///
+/// EIP-2098: <https://eips.ethereum.org/EIPS/eip-2098>
 pub fn compact_y_parity_and_s(sig: &Signature) -> Result<Vec<u8>, GatewayErrors> {
     let mut y_parity_and_s = sig.s.encode();
     if sig.recovery_id()?.is_y_odd() {

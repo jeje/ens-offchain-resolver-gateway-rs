@@ -24,12 +24,15 @@ Precompiled ENS gateways are available in [releases page](https://github.com/jej
 
 A Docker image is also available: https://hub.docker.com/r/jeje/ens-offchain-resolver-gateway-rs
 
+Lastly a library is provided to ease implementation of custom gateways without duplicating much code.
+A good sample is the [default implementation provided](src/main.rs).
+
 ### CLI Usage
 
 ```
 ENS Offchain Gateway server answering requests from CCIP-READ protocol (aka ERC-3668)
 
-Usage: offchain-resolver-gateway [OPTIONS] --privatekey <VALUE> <--json <FILE>>
+Usage: ens-gateway [OPTIONS] --privatekey <VALUE> <--json <FILE>>
 
 Options:
   -k, --privatekey <VALUE>  private key of the wallet allowed to sign offchain ENS record results [env: PRIVATE_KEY]

@@ -89,7 +89,7 @@ jobs:
       - name: "Upload Binaries"
         uses: "taiki-e/upload-rust-binary-action@v1"
         with:
-          bin: "offchain-resolver-gateway"
+          bin: "ens-gateway"
           target: ${{ matrix.target }}
           archive: $bin-${{ matrix.target }}
           ref: refs/tags/v${{ needs.get-tag.outputs.pkg-version }}
