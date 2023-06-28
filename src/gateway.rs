@@ -3,6 +3,7 @@ use crate::errors::GatewayErrors;
 use crate::utils::{compact_y_parity_and_s, decode_dns_name};
 use crate::ResolverCalls;
 use async_trait::async_trait;
+use axum::Router;
 use ccip_read_server::types::{CCIPReadHandler, RPCCall};
 use ccip_read_server::Server;
 use ethers::abi::{encode, AbiDecode, AbiEncode};
@@ -16,6 +17,7 @@ use std::str::FromStr;
 use std::sync::Arc;
 use tracing::{debug, error, info};
 
+/// ENS gateway
 #[derive(Clone)]
 pub struct Gateway {
     signer: Wallet<SigningKey>,
@@ -41,6 +43,7 @@ impl Gateway {
         })
     }
 
+    /// Start ENS gateway
     pub async fn start(mut self) -> Result<(), GatewayErrors> {
         // Offchain resolver contract ABI
         let abi = AbiParser::default()
@@ -49,6 +52,20 @@ impl Gateway {
         self.server.add(abi, "resolve", Arc::new(self.clone()))?;
 
         Ok(self.server.start(None).await?)
+    }
+
+    /// Start ENS gateway with extra `axum` [Router] allowing to embed extra custom logic
+    ///
+    /// # Arguments
+    /// * `router` an optional Axum router to merge with the CCIP-Read one provided by the library
+    pub async fn start_with_extra_router(mut self, router: Router) -> Result<(), GatewayErrors> {
+        // Offchain resolver contract ABI
+        let abi = AbiParser::default()
+            .parse_str(r#"[function resolve(bytes memory name, bytes memory data) external view returns(bytes result, uint64 expires, bytes sig)]"#)?;
+
+        self.server.add(abi, "resolve", Arc::new(self.clone()))?;
+
+        Ok(self.server.start(Some(router)).await?)
     }
 
     #[tracing::instrument(
