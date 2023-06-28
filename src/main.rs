@@ -1,8 +1,7 @@
-use crate::db::{Database, JsonDatabase};
-use crate::gateway::Gateway;
 use clap::{arg, command, value_parser, ArgGroup};
 use color_eyre::Report;
-use ethers::prelude::abigen;
+use ens_gateway_server::db::{Database, JsonDatabase};
+use ens_gateway_server::gateway::Gateway;
 use ethers::signers::{LocalWallet, Signer};
 use eyre::Result;
 use std::env;
@@ -12,17 +11,6 @@ use std::sync::Arc;
 use tracing::info;
 use tracing_subscriber::prelude::*;
 use tracing_subscriber::EnvFilter;
-
-mod db;
-mod errors;
-mod gateway;
-mod utils;
-
-abigen!(
-    Resolver,
-    "./res/Resolver.json",
-    event_derives(serde::Deserialize, serde::Serialize)
-);
 
 #[tokio::main]
 async fn main() -> Result<(), Report> {

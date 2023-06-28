@@ -1,7 +1,15 @@
 [package]
-name = "offchain-resolver-gateway"
-version = "0.1.1"
+name = "ens-offchain-resolver-gateway"
+version = "0.1.2"
 edition = "2021"
+
+[lib]
+name = "ens_gateway_server"
+path = "src/lib.rs"
+
+[[bin]]
+name = "ens-gateway"
+path = "src/main.rs"
 
 [dependencies]
 ccip-read-server = "0.1.0"
