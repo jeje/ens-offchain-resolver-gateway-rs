@@ -1,18 +1,18 @@
 <!-- Badges -->
 [![CI Status][ci-badge]][ci-url]
 [![Docker][docker-badge]][docker-url]
-<!-- [![Crates.io][crates-badge]][crates-url] -->
-<!-- [![Docs.rs][docs-badge]][docs-url] -->
+[![Crates.io][crates-badge]][crates-url]
+[![Docs.rs][docs-badge]][docs-url]
 
 <!-- Badge Images -->
 [ci-badge]: https://github.com/jeje/ens-offchain-resolver-gateway-rs/actions/workflows/ci.yml/badge.svg
 [ci-url]: https://github.com/jeje/ens-offchain-resolver-gateway-rs/actions/workflows/ci.yml
 [docker-badge]: https://img.shields.io/badge/docker-%230db7ed.svg?logo=docker&logoColor=white
 [docker-url]: https://hub.docker.com/r/jeje/ens-offchain-resolver-gateway-rs
-<!-- [crates-badge]: https://img.shields.io/crates/v/ethers-ccip-read.svg -->
-<!--[crates-url]: https://crates.io/crates/ethers-ccip-read-->
-<!--[docs-badge]: https://docs.rs/ethers-ccip-read/badge.svg-->
-<!--[docs-url]: https://docs.rs/ethers-ccip-read-->
+[crates-badge]: https://img.shields.io/crates/v/ens-offchain-resolver-gateway.svg
+[crates-url]: https://crates.io/crates/ens-offchain-resolver-gateway
+[docs-badge]: https://docs.rs/ens-offchain-resolver-gateway/badge.svg
+[docs-url]: https://docs.rs/ens-offchain-resolver-gateway
 
 
 ## ENS Offchain Resolver Gateway

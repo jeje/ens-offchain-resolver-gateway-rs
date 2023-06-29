@@ -1,7 +1,15 @@
 [package]
 name = "ens-offchain-resolver-gateway"
+description = "ENS Offchain Resolver Gateway"
 version = "0.1.2"
 edition = "2021"
+license = "MIT"
+license-file = "LICENSE"
+keywords = ["ensdomains", "gateway", "ccip"]
+homepage = "https://github.com/jeje/ens-offchain-resolver-gateway-rs"
+repository = "https://github.com/jeje/ens-offchain-resolver-gateway-rs"
+documentation = "https://docs.rs/ens_gateway_server"
+readme = "README.md"
 
 [lib]
 name = "ens_gateway_server"

@@ -95,7 +95,7 @@ jobs:
           ref: refs/tags/v${{ needs.get-tag.outputs.pkg-version }}
           token: ${{ github.token }}
 
-  push-to-registry:
+  push-to-docker-registry:
     name: "Push Docker image to Docker Hub"
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     needs:
@@ -125,3 +125,21 @@ jobs:
           push: true
           tags: jeje/ens-offchain-resolver-gateway-rs:latest,jeje/ens-offchain-resolver-gateway-rs:v${{ needs.get-tag.outputs.pkg-version }}
           labels: ${{ steps.meta.outputs.labels }}
+
+  publish-crate:
+    name: Publish Crate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v3
+
+      - name: Install stable toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+
+      - run: cargo publish --token ${CRATES_TOKEN}
+        env:
+          CRATES_TOKEN: ${{ secrets.CRATES_TOKEN }}
