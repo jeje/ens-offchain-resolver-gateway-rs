@@ -48,7 +48,7 @@ impl Gateway {
 
         self.server.add(abi, "resolve", Arc::new(self.clone()))?;
 
-        Ok(self.server.start().await?)
+        Ok(self.server.start(None).await?)
     }
 
     #[tracing::instrument(
